@@ -10,8 +10,8 @@ app.use(express.json());
 app.use(cors());
 app.use(morgan('dev'));
 
-// const status_404 = require('./middleware/404.js');
-// const status_500 = require('./middleware/500.js');
+const status_404 = require('./middleware/404.js');
+const status_500 = require('./middleware/500.js');
 
 app.use('/', router);
 // test
@@ -19,8 +19,8 @@ app.use('/', router);
 //     res.status(200).send('Home Page');
 //   });
 
-// app.use('*', status_404);
-// app.use(status_500);
+app.use('*', status_404);
+app.use(status_500);
 
 // http://localhost:4000
 module.exports = {
