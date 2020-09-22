@@ -10,12 +10,18 @@ class Model {
   constructor(schema) {
     this.schema = schema;
   }
+  /**
+ * 
+ * @param {object} record 
+ */
 
   async create(record) {
 
     console.log('recorde', record);
     let addedUserName = await this.schema.find({ username: record.username });
     await console.log('searching user .... ', addedUserName);
+
+
     if (addedUserName.length === 0) {  //no such username in db so hash the pass and save 
       record.password = await bcrypt.hash(record.password, 5);
 
@@ -23,7 +29,7 @@ class Model {
       console.log('hashed record >>>>> ', newRecord);
       return await newRecord.save();
     }
-    return Promise.reject(' user is exist');
+    return ' user is exist';
   }
 
   async authenticate(user, pass) {
@@ -32,26 +38,33 @@ class Model {
     // compare the password with the DB hashed password
     //return the user object
 
-    let userInDb = await this.schema.find({ username: user });
-    console.log('userInDb inside authentication :', userInDb);
+    let userInDb = await this.schema.findOne({ username: user });
+    // console.log('userInDb inside authentication :', userInDb);
+    // console.log('userInDb',userInDb)
+    let valid = await bcrypt.compare(pass, userInDb.password);
+    // console.log('userInDb.password',userInDb.password )
+    
+    // console.log('valid ?? :', valid);
 
-    let valid = await bcrypt.compare(pass, userInDb[0].password);
-    console.log('valid ?? :', valid);
-    returnValue = valid ? userInDb : Promise.reject('wrong password !!');
+    let returnValue = valid ? userInDb : 'wrong password !!';
+    console.log('returnValue', returnValue);
     return returnValue;
   }
 
   async list(){
     
-    let allUsers = await this.schema.find({ });
-    // console.log('inside list',allUsers);
+    let allUsers = await this.schema.find();
+    console.log('inside list',allUsers);
 
     return allUsers;
   }
 
-
-  async  generateToken(user){
-    let token = await jwt.sign({ username: user.username }, SECRET);
+  /**
+ * 
+ * @param {object} user 
+ */
+  generateToken(user){
+    let token =  jwt.sign({ username: user.username }, SECRET);
     return token;
   }
   
