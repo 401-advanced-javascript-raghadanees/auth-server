@@ -10,7 +10,8 @@ class Model {
   constructor(schema) {
     this.schema = schema;
   }
-  /**
+
+/**
  * 
  * @param {object} record 
  */
@@ -59,7 +60,7 @@ class Model {
     return allUsers;
   }
 
-  /**
+/**
  * 
  * @param {object} user 
  */
@@ -67,6 +68,41 @@ class Model {
     let token =  jwt.sign({ username: user.username }, SECRET);
     return token;
   }
+
+/**
+ * To authenticate Token
+ * @param {*} token 
+ */
+
+  async authenticateToken(token) {
+    try {
+      let tokenObject = jwt.verify(token, SECRET);
+      console.log('token..........', token);
+      console.log('tokenObject----->', tokenObject);
+
+      let tokenDB = await this.schema.find({ username: tokenObject.username });
+
+      console.log('tokenDB -----> ', tokenDB);
+     
+
+
+      if (tokenDB) {
+        return Promise.resolve({ 
+          tokenObject: tokenObject,
+          user: tokenObject.username
+         });
+
+      } else {
+        return Promise.reject();
+      }
+
+    } catch (e) {
+      // console.log('catch reject .......');
+      return Promise.reject();
+    }
+
+  }
+
   
 }
 

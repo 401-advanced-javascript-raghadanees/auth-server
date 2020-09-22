@@ -4,13 +4,14 @@ const router = express.Router();
 const users = require('./models/users-model');
 const basicAuth = require('./middleware/basic.js');
 const modelFinder = require('../middleware/model-finder.js');
+const bearerAuth = require('./middleware/bearer');
 
 router.param('model', modelFinder.gettingModel);
 
 router.post('/signup', signupHandler);
 router.post('/signin', basicAuth, signinHandler);
 router.get('/:model', usersHandler);
-
+router.get('/secret', bearerAuth, handleSecret);
 
 /**
  * for signup 
@@ -59,6 +60,15 @@ async function usersHandler(req, res, next) {
   res.json({count:modelll.length, results: modelll});
 }
 
+/**
+ * 
+ * @param {object} req 
+ * @param {object} res 
+ */
+function handleSecret(req, res) {
+
+  res.status(200).send(req.token);
+}
 
 
 module.exports = router;
