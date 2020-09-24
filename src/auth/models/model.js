@@ -10,6 +10,7 @@ class Model {
   constructor(schema) {
     this.schema = schema;
   }
+
   /**
  * 
  * @param {object} record 
@@ -43,7 +44,7 @@ class Model {
     // console.log('userInDb',userInDb)
     let valid = await bcrypt.compare(pass, userInDb.password);
     // console.log('userInDb.password',userInDb.password )
-    
+
     // console.log('valid ?? :', valid);
 
     let returnValue = valid ? userInDb : 'wrong password !!';
@@ -51,10 +52,10 @@ class Model {
     return returnValue;
   }
 
-  async list(){
-    
+  async list() {
+
     let allUsers = await this.schema.find();
-    console.log('inside list',allUsers);
+    console.log('inside list', allUsers);
 
     return allUsers;
   }
@@ -63,11 +64,57 @@ class Model {
  * 
  * @param {object} user 
  */
-  generateToken(user){
-    let token =  jwt.sign({ username: user.username }, SECRET);
+  generateToken(user) {
+    let token = jwt.sign({ username: user.username }, SECRET);
     return token;
   }
-  
+
+  /**
+ * To authenticate Token
+ * @param {*} token 
+ */
+
+  async authenticateToken(token) {
+    try {
+      let tokenObject = jwt.verify(token, SECRET);
+      console.log('token..........', token);
+      console.log('tokenObject----->', tokenObject);
+
+      let tokenDB = await this.schema.find({ username: tokenObject.username });
+
+      console.log('tokenDB -----> ', tokenDB);
+
+
+
+      if (tokenDB) {
+        return Promise.resolve({
+          tokenObject: tokenObject,
+          user: tokenObject.username,
+        });
+
+      } else {
+        return Promise.reject();
+      }
+
+    } catch (e) {
+      // console.log('catch reject .......');
+      return Promise.reject();
+    }
+
+  }
+
+  // >>>>>>>>>>>>>>>>>>>>>>>>.>>>>>>>>>>>>>>>>>>>>>>>>>>
+  accessPermission(role, action) {
+    let actions = {
+      user: ['read'],
+      writer: ['read', 'create'],
+      editor: ['read', 'create', 'update'],
+      admin: ['read', 'read-submisi', 'create', 'update', 'delete']
+
+    };
+return 
+  }
+
 }
 
 module.exports = Model;
