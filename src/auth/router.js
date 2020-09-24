@@ -4,7 +4,7 @@ const router = express.Router();
 const users = require('./models/users-model');
 const basicAuth = require('./middleware/basic.js');
 const modelFinder = require('../middleware/model-finder.js');
-const bearerAuth = require('./middleware/bearer');
+const bearerAuth = require('./middleware/bearer.js');
 
 router.param('model', modelFinder.gettingModel);
 
@@ -66,8 +66,9 @@ async function usersHandler(req, res, next) {
  * @param {object} res 
  */
 function handleSecret(req, res) {
-
+  console.log('req.token', req.token);
   res.status(200).send(req.token);
+
 }
 
 

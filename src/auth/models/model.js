@@ -11,7 +11,7 @@ class Model {
     this.schema = schema;
   }
 
-/**
+  /**
  * 
  * @param {object} record 
  */
@@ -60,7 +60,7 @@ class Model {
     return allUsers;
   }
 
-/**
+  /**
  * 
  * @param {object} user 
  */
@@ -69,7 +69,7 @@ class Model {
     return token;
   }
 
-/**
+  /**
  * To authenticate Token
  * @param {*} token 
  */
@@ -89,8 +89,8 @@ class Model {
       if (tokenDB) {
         return Promise.resolve({ 
           tokenObject: tokenObject,
-          user: tokenObject.username
-         });
+          user: tokenObject.username,
+        });
 
       } else {
         return Promise.reject();
