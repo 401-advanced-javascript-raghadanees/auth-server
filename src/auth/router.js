@@ -7,10 +7,16 @@ const basicAuth = require('./middleware/basic.js');
 const bearerAuth = require('./middleware/bearer.js');
 
 
+// const aclPermission = require('./middleware/acl')
+
+
+
 router.post('/signup', signupHandler);
 router.post('/signin', basicAuth, signinHandler);
 router.get('/users', basicAuth, usersHandler);
 router.get('/secret', bearerAuth, handleSecret);
+
+// router.get()
 
 /**
  * for signup 
