@@ -80,8 +80,8 @@ class Model {
       console.log('token..........', token);
       console.log('tokenObject----->', tokenObject);
 
-      let tokenDB = await this.schema.find({ username: tokenObject.username });
-
+     let tokenDB = await this.schema.find({ username: tokenObject.username });
+      
       console.log('tokenDB -----> ', tokenDB);
 
 

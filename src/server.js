@@ -13,12 +13,13 @@ app.use(morgan('dev'));
 const status_404 = require('./middleware/404.js');
 const status_500 = require('./middleware/500.js');
 
-app.use('/', router);
+app.use(router);
 // test
 // app.get('/', (req, res) => {
 //     res.status(200).send('Home Page');
 //   });
 
+// 404 500 must be at the end
 app.use('*', status_404);
 app.use(status_500);
 

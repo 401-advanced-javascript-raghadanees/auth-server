@@ -1,7 +1,7 @@
 'use strict';
 
 
-const Users = require('../models/users-model');
+const Users = require('../models/users-schema');
 
 /**
  * for bearer auth
@@ -19,15 +19,14 @@ module.exports = (req, res, next) => {
   console.log('req.headers.authorization', req.headers.authorization);
 
   let bearer = req.headers.authorization.split(' ');
-  console.log('bearer.............', bearer);
-  if (bearer[0] == 'Bearer') {
+  console.log('bearer.............', bearer); 
+  if (bearer[0] == 'Bearer') { /// ['bearer', token]
     const token = bearer[1];
-    console.log('token.............', token);
+    console.log('token in bearer.............', token);
     
 
     Users.authenticateToken(token).then(validUser => {
-
-      console.log('validUser........', validUser);
+      console.log('validUser....bearer....', validUser);
       req.user = validUser;
       next();
     }).catch(err => next('Invalid Token !'));
