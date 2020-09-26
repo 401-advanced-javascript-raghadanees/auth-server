@@ -19,32 +19,32 @@ module.exports = (req, res, next) => {
     return;
 
   }  
-    // user:pass
-    const authBasic = req.headers.authorization.split(' ').pop(); // ["basic YWhtYWRfc2hlbGEgOjEyMzQ="]
-    console.log('authBasic', authBasic);
+  // user:pass
+  const authBasic = req.headers.authorization.split(' ').pop(); // ["basic YWhtYWRfc2hlbGEgOjEyMzQ="]
+  console.log('authBasic', authBasic);
 
-    let [username, pass] = base64.decode(authBasic).split(':'); // "Raghad:1234"
-    // const [userName, pass] = base64.decode(auth[1]).split(':'); /// if we did not use pop
-    console.log('__BasicAuth__', username, pass);
-    // we have the user obj
-    users.authenticate(username, pass).then(validUser => {
-      console.log('validUser ....basic',validUser)
-      if (!validUser) {
-        return next('Wrong Useranem or Password');
-      }
-      // generate a token for this user and return
-      console.log('validUser', validUser);
+  let [username, pass] = base64.decode(authBasic).split(':'); // "Raghad:1234"
+  // const [userName, pass] = base64.decode(auth[1]).split(':'); /// if we did not use pop
+  console.log('__BasicAuth__', username, pass);
+  // we have the user obj
+  users.authenticate(username, pass).then(validUser => {
+    console.log('validUser ....basic',validUser);
+    if (!validUser) {
+      return next('Wrong Useranem or Password');
+    }
+    // generate a token for this user and return
+    console.log('validUser', validUser);
 
-      let token = users.generateToken(validUser.username);
-      if (token) {
-        req.basicAuth = {
-          token: token,
-          user: validUser
-        }
-      }
-      next();
+    let token = users.generateToken(validUser.username);
+    if (token) {
+      req.basicAuth = {
+        token: token,
+        user: validUser,
+      };
+    }
+    next();
 
-    }).catch(err => next(err));
+  }).catch(err => next(err));
 
   
 };

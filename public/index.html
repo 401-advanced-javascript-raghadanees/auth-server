@@ -1,0 +1,39 @@
+<!--add a button to take me to signin with github-->
+
+<!-- Client ID
+2637fcea3e8883245715
+Client Secret
+586cae131b97ba02f8ece3c605195122ce77a417 -->
+<!-- 1. Request a user's GitHub identity -->
+
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Github Auth Test</title>
+    </head>
+    <body>
+        <main>
+            <a id="oauth">Login</a>
+        </main>
+        <script>
+            let URL = 'https://github.com/login/oauth/authorize';
+            let options = {
+                client_id: 'b203dbfdb4cfc6f37463',
+                redirect_uri: 'http://localhost:4000/oauth'
+            };
+            // in order to get this url
+            // https://github.com/login/oauth/authorize?client_id=b203dbfdb4cfc6f37463&redirect_uri=,,,
+            let queryString = Object.keys(options).map((key)=> {
+                return `${key}=` + encodeURIComponent(options[key]);
+            }).join('&');
+
+            let authUrl = `${URL}?${queryString}`;
+
+            let link = document.getElementById('oauth');
+            link.setAttribute('href', authUrl);
+
+        </script>
+    </body>
+</html>

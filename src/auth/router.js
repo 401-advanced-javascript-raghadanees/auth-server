@@ -1,3 +1,4 @@
+
 'use strict';
 const express = require('express');
 const router = express.Router();
@@ -5,19 +6,14 @@ const router = express.Router();
 const users = require('./models/users-schema');
 const basicAuth = require('./middleware/basic.js');
 const bearerAuth = require('./middleware/bearer.js');
-
-
+const oauth = require('./middleware/oauth');
 // const aclPermission = require('./middleware/acl')
-
-
 
 router.post('/signup', signupHandler);
 router.post('/signin', basicAuth, signinHandler);
 router.get('/users', basicAuth, usersHandler);
 router.get('/secret', bearerAuth, handleSecret);
-
-// router.get()
-
+// router.get('/oauth',oauth, handelOauth)
 /**
  * for signup 
  * @param {object} req 
@@ -25,19 +21,19 @@ router.get('/secret', bearerAuth, handleSecret);
  */
 
 async function signupHandler(req, res) {
-    users.findOne({ username: req.body.username }).then(results => {
-      console.log('req.body.username in router', req.body.username);
+  users.findOne({ username: req.body.username }).then(results => {
+    console.log('req.body.username in router', req.body.username);
 
-      if (results) {
-          res.send('username is already exists! please choose another one');
-      } else {
-          let user = new users(req.body);
+    if (results) {
+      res.send('username is already exists! please choose another one');
+    } else {
+      let user = new users(req.body);
 
-          user.save().then((user) => { 
-              let token = users.generateToken(user.username); 
-              res.status(200).send(token);
-          });
-      }
+      user.save().then((user) => { 
+        let token = users.generateToken(user.username); 
+        res.status(200).send(token);
+      });
+    }
   });
 }
 
@@ -48,17 +44,17 @@ async function signupHandler(req, res) {
  */
 
 function signinHandler(req, res) {
-  console.log('req.basicAuth', req.basicAuth)
+  console.log('req.basicAuth', req.basicAuth);
   if (req.basicAuth) {
   // add the token as cookie 
-        res.cookie('token', req.basicAuth.token);
-        // add a header
-        res.set('token', req.basicAuth.token);
-        // send json object with token and user record
-        res.status(200).json(req.basicAuth);
-    } else {
-        res.status(403).send('Invalid login signinHandler');
-    }
+    res.cookie('token', req.basicAuth.token);
+    // add a header
+    res.set('token', req.basicAuth.token);
+    // send json object with token and user record
+    res.status(200).json(req.basicAuth);
+  } else {
+    res.status(403).send('Invalid login signinHandler');
+  }
 }
 /**
  * for getting all users 
@@ -66,15 +62,15 @@ function signinHandler(req, res) {
  * @param {object} res 
  */
 
- function usersHandler(req, res) {
+function usersHandler(req, res) {
   if (req.basicAuth.token) {
     users.find().then(result => {
-        // res.status(200).json(result);
-        res.status(200).json({numberOfUsers: result.length, TheList: result});
+      // res.status(200).json(result);
+      res.status(200).json({numberOfUsers: result.length, TheList: result});
     });
-} else {
+  } else {
     res.status(403).send('Invalid login ,,,usersHandler ');
-}
+  }
 }
 
 /**
@@ -86,6 +82,11 @@ function handleSecret(req, res) {
   console.log('req.user',req.user);
   res.status(200).send(req.user);
 }
+
+router.get('/oauth',oauth,(req,res)=>{
+  res.status(200).send(req.token);
+
+});
 
 
 module.exports = router;
