@@ -14,7 +14,7 @@ const userSchema = mongoose.Schema({
 });
 
 userSchema.pre('save', async function() {
-  this.password = await bcrypt.hash(this.password, 10); /// hashing password then save in db
+  this.password = await bcrypt.hash(this.password, 5); /// hashing password then save in db
 });
 
 // user.methods >>>> adding methods to the schema 
@@ -42,16 +42,16 @@ userSchema.statics.authenticateToken = async function (token) {
   
   try {
     let tokenObject = jwt.verify(token, SECRET); // return an object after decoding the token
-    console.log("tokenObject -----> ", tokenObject); 
+    console.log('tokenObject -----> ', tokenObject); 
 
     let tokenDB = await this.findOne({ username: tokenObject.username }); 
-    console.log("tokenDB ---------<<< ", tokenDB); 
+    console.log('tokenDB ---------<<< ', tokenDB); 
 
     if (tokenDB) {
       return Promise.resolve({
         tokenObject: tokenObject,
-        user: tokenObject.username
-      })
+        user: tokenObject.username,
+      });
     } else {
       return Promise.reject();
     }
@@ -59,6 +59,6 @@ userSchema.statics.authenticateToken = async function (token) {
   } catch (e) {
     return Promise.reject();
   }
-}
+};
 
 module.exports = mongoose.model('user', userSchema);

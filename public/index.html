@@ -23,7 +23,8 @@ Client Secret
                 client_id: 'b203dbfdb4cfc6f37463',
                 redirect_uri: 'http://localhost:4000/oauth'
             };
-            
+            // in order to get this url
+            // https://github.com/login/oauth/authorize?client_id=b203dbfdb4cfc6f37463&redirect_uri=,,,
             let queryString = Object.keys(options).map((key)=> {
                 return `${key}=` + encodeURIComponent(options[key]);
             }).join('&');
