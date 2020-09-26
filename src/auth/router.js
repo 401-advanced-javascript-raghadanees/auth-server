@@ -1,3 +1,4 @@
+
 'use strict';
 const express = require('express');
 const router = express.Router();
@@ -6,7 +7,7 @@ const users = require('./models/users-schema');
 const basicAuth = require('./middleware/basic.js');
 const bearerAuth = require('./middleware/bearer.js');
 const oauth = require('./middleware/oauth');
-
+// const aclPermission = require('./middleware/acl')
 
 router.post('/signup', signupHandler);
 router.post('/signin', basicAuth, signinHandler);
