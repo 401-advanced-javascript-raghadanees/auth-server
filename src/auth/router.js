@@ -5,14 +5,14 @@ const router = express.Router();
 
 const users = require('./models/users-schema');
 const basicAuth = require('./middleware/basic.js');
-const bearerAuth = require('./middleware/bearer.js');
+// const bearerAuth = require('./middleware/bearer.js');
 const oauth = require('./middleware/oauth');
-// const aclPermission = require('./middleware/acl')
+
 
 router.post('/signup', signupHandler);
 router.post('/signin', basicAuth, signinHandler);
 router.get('/users', basicAuth, usersHandler);
-router.get('/secret', bearerAuth, handleSecret);
+
 // router.get('/oauth',oauth, handelOauth)
 /**
  * for signup 
@@ -78,10 +78,7 @@ function usersHandler(req, res) {
  * @param {object} req 
  * @param {object} res 
  */
-function handleSecret(req, res) {
-  console.log('req.user',req.user);
-  res.status(200).send(req.user);
-}
+
 
 router.get('/oauth',oauth,(req,res)=>{
   res.status(200).send(req.token);

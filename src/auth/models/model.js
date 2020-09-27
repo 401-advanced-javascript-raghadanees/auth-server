@@ -109,10 +109,10 @@ class Model {
       user: ['read'],
       writer: ['read', 'create'],
       editor: ['read', 'create', 'update'],
-      admin: ['read', 'read-submisi', 'create', 'update', 'delete']
+      admin: ['read', 'read-submisi', 'create', 'update', 'delete'],
 
     };
-return 
+    return; 
   }
 
 }

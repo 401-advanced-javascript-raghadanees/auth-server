@@ -5,6 +5,7 @@ const app = express();
 const cors = require('cors');
 const morgan = require('morgan');
 const router = require('./auth/router.js');
+const extraRoutes = require ('./auth/extra-routes');
 
 app.use(express.json());
 app.use(cors());
@@ -14,6 +15,7 @@ const status_404 = require('./middleware/404.js');
 const status_500 = require('./middleware/500.js');
 
 app.use(router);
+app.use(extraRoutes);
 // test
 // app.get('/', (req, res) => {
 //     res.status(200).send('Home Page');

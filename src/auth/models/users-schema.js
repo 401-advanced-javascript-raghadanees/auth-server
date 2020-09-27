@@ -13,6 +13,13 @@ const userSchema = mongoose.Schema({
   role: { type: String, enum: ['admin', 'editor', 'writer', 'user'] },
 });
 
+let roles = {
+  admin: ['read', 'create', 'update', 'delete'],
+  editor: ['read', 'create', 'update'],
+  writer: ['read', 'create'],
+  user: ['read'],
+};
+
 userSchema.pre('save', async function() {
   this.password = await bcrypt.hash(this.password, 5); /// hashing password then save in db
 });
