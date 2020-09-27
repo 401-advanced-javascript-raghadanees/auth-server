@@ -19,3 +19,6 @@ npm test
 
 ### lab 13
 ![Image](/assets/lab13.png)
+
+### lab 14
+![Image](/assets/lab14.png)
